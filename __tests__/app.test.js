@@ -21,4 +21,12 @@ describe('gitty routes', () => {
 
     console.log('req.header.location', req.header.location);
   });
+
+  it('should direct users to post after loggin in', async () => {
+    const req = await request
+      .agent(app)
+      .get('/api/v1/github/login/callback?code=42')
+      .redirects(1);
+    expect(req.req.path).toEqual('/api/v1/post');
+  });
 });
