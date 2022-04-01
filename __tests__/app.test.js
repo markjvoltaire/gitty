@@ -3,10 +3,7 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 
-
-jest.mock('../lib/utils/github')
-
-
+jest.mock('../lib/utils/github');
 
 describe('gitty routes', () => {
   beforeEach(() => {
@@ -34,4 +31,6 @@ describe('gitty routes', () => {
       .redirects(1);
     expect(req.redirects[0]).toEqual(expect.stringContaining('/api/v1/posts'));
   });
+
+  it('should create a post if a user is signed in', async () => {
 });
