@@ -3,6 +3,11 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 
+
+jest.mock('../lib/utils/github')
+
+
+
 describe('gitty routes', () => {
   beforeEach(() => {
     return setup(pool);
@@ -27,6 +32,6 @@ describe('gitty routes', () => {
       .agent(app)
       .get('/api/v1/github/login/callback?code=42')
       .redirects(1);
-    expect(req.req.path).toEqual('/api/v1/post');
+    expect(req.redirects[0]).toEqual(expect.stringContaining('/api/v1/posts'));
   });
 });
