@@ -2,6 +2,8 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
+const Posts = require('../lib/models/Post');
+const { agent } = require('supertest');
 
 jest.mock('../lib/utils/github');
 
@@ -41,11 +43,18 @@ describe('gitty routes', () => {
     const res = await agent
       .post('/api/v1/posts')
       .send({ userposts: 'hello world' });
-    console.log('res', res.body);
 
     expect(res.body).toEqual({
       id: '1',
       userposts: 'hello world',
     });
   });
+});
+
+it('should get all pants', async () => {
+  const agent = request.agent(app);
+  const expected = await Posts.getAllposts();
+  const res = await agent.get('/api/v1/posts');
+
+  expect(res.body).toEqual(expected);
 });
