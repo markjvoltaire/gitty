@@ -49,12 +49,12 @@ describe('gitty routes', () => {
       userposts: 'hello world',
     });
   });
-});
 
-it('should get all pants', async () => {
-  const agent = request.agent(app);
-  const expected = await Posts.getAllposts();
-  const res = await agent.get('/api/v1/posts');
-
-  expect(res.body).toEqual(expected);
+  it('should get all posts', async () => {
+    const agent = request.agent(app);
+    const expected = await Posts.getAllPosts();
+    const res = await agent.get('/api/v1/posts');
+    console.log('res.body', res.body);
+    expect(res.body).toEqual(expected);
+  });
 });

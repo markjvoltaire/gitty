@@ -21,3 +21,5 @@ CREATE TABLE posts (
   userposts TEXT
   
 );
+
+
