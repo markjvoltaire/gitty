@@ -22,8 +22,6 @@ describe('gitty routes', () => {
     expect(req.header.location).toMatch(
       /https:\/\/github.com\/login\/oauth\/authorize\?client_id=[\w\d]+&scope=user&redirect_uri=http:\/\/localhost:7890\/api\/v1\/github\/login\/callback/i
     );
-
-    console.log('req.header.location', req.header.location);
   });
 
   it('should direct users to post after loggin in', async () => {
@@ -37,7 +35,8 @@ describe('gitty routes', () => {
   it('should create a post if a user is signed in', async () => {
     const agent = request.agent(app);
     //sign in
-    agent.get('/api/v1/github/login/callback?code=42').redirects(1);
+    await agent.get('/api/v1/github/login');
+    await agent.get('/api/v1/github/login/callback?code=42').redirects(1);
 
     //request
     const res = await agent
@@ -52,12 +51,11 @@ describe('gitty routes', () => {
 
   it('should get all posts', async () => {
     const agent = request.agent(app);
-    agent.get('/api/v1/github/login/callback?code=42').redirects(1);
+    await agent.get('/api/v1/github/login');
+    await agent.get('/api/v1/github/login/callback?code=42').redirects(1);
     const expected = await Posts.getAllPosts();
     const res = await agent.get('/api/v1/posts');
-    console.log('res.body', res.body);
+
     expect(res.body).toEqual(expected);
-    console.log('expected', expected);
   });
-  it('should delete cookie session', async () => {});
 });
