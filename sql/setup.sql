@@ -23,3 +23,4 @@ CREATE TABLE posts (
 );
 
 
+INSERT INTO posts (userposts) VALUES ('my first posts');
