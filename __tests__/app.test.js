@@ -33,4 +33,19 @@ describe('gitty routes', () => {
   });
 
   it('should create a post if a user is signed in', async () => {
+    const agent = request.agent(app);
+    //sign in
+    agent.get('/api/v1/github/login/callback?code=42').redirects(1);
+
+    //request
+    const res = await agent
+      .post('/api/v1/posts')
+      .send({ userposts: 'hello world' });
+    console.log('res', res.body);
+
+    expect(res.body).toEqual({
+      id: '1',
+      userposts: 'hello world',
+    });
+  });
 });
