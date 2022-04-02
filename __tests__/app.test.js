@@ -52,8 +52,8 @@ describe('gitty routes', () => {
 
   it('should get all posts', async () => {
     const agent = request.agent(app);
-    const expected = await Posts.getAllPosts();
     agent.get('/api/v1/github/login/callback?code=42').redirects(1);
+    const expected = await Posts.getAllPosts();
     const res = await agent.get('/api/v1/posts');
     console.log('res.body', res.body);
     expect(res.body).toEqual(expected);
