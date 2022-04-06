@@ -58,4 +58,27 @@ describe('gitty routes', () => {
 
     expect(res.body).toEqual(expected);
   });
+
+  it('should delete the cookie', async () => {
+    const agent = request.agent(app);
+    //sign in
+    await agent.get('/api/v1/github/login');
+    await agent.get('/api/v1/github/login/callback?code=42').redirects(1);
+
+    //request
+    const res = await agent
+      .post('/api/v1/posts')
+      .send({ userposts: 'hello world' });
+
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      userposts: 'hello world',
+    });
+    // signout user
+    const res2 = await agent.delete('/api/v1/github');
+    expect(res2.body.message).toEqual('signed out successfully');
+    //signed out user should not be able to view post
+    const res3 = await agent.get('/api/v1/posts');
+    expect(res3.body).toEqual({ status: 401, message: 'please sign in' });
+  });
 });
