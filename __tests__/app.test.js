@@ -81,4 +81,25 @@ describe('gitty routes', () => {
     const res3 = await agent.get('/api/v1/posts');
     expect(res3.body).toEqual({ status: 401, message: 'please sign in' });
   });
+
+  it('should return an array of quote objects from 3 sets of API', async () => {
+    const res = await request(app).get('/api/v1/quotes');
+
+    const expected = [
+      {
+        author: expect.any(String),
+        content: expect.any(String),
+      },
+      {
+        author: expect.any(String),
+        content: expect.any(String),
+      },
+      {
+        author: expect.any(String),
+        content: expect.any(String),
+      },
+    ];
+    console.log('res.body', res.body);
+    expect(res.body).toEqual(expected);
+  });
 });
